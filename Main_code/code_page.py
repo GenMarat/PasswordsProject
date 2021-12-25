@@ -1,16 +1,17 @@
 import csv
 
 def menu():
-    print('1) Create a new user ID')
-    print('2) Change a password')
-    print('3) Display all user IDs')
-    print('4) Quit')
     while True:
+        print('1) Create a new user ID')
+        print('2) Change a password')
+        print('3) Display all user IDs')
+        print('4) Quit')
         user_choice = input('Enter selection: ')
         if user_choice in ['1', '2', '3', '4']:
             break
         else:
             print('Incorrect choice')
+            print()
     return user_choice
 
 def password_score(password: str) -> str: #Проверяет надежность пароля. Возвращает оценку от 0-5
@@ -61,3 +62,9 @@ def password():
             break
     return password
 
+#запрашивает ID -> открывает файл на чтение -> получает ID из базы -> ищет на вхождение ID пользователя ->
+#возвращет ID, если нет в базе данных / сообщает об задвоение и запрашивает повторно ID
+
+
+def main():
+    file = open('id_file.csv', 'w')
