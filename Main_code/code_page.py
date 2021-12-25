@@ -69,15 +69,21 @@ def id_verification():
     file = csv.reader(open('id_file.csv', 'r'))
     while True:
         id_user = input('Enter ID: ')
+        list_id = []
         for i in file:
-            if i[0] == id_user:
-                print('Such a ID already exists')
-            else:
-                return id_user
+            list_id.append(i)
+        if id_user in list_id:
+            print('Such a ID already exists')
+        else:
             break
-
-
+    return list_id #временно
 
 
 def main():
     file = open('id_file.csv', 'w')
+    file.close()
+
+if __name__ == '__main__':
+    main()
+    x = id_verification()
+    print(x)
