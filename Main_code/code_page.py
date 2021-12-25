@@ -67,23 +67,23 @@ def password():
 
 def id_verification():
     file = csv.reader(open('id_file.csv', 'r'))
+    list_id = []
     while True:
         id_user = input('Enter ID: ')
-        list_id = []
+        count = 0
         for i in file:
-            list_id.append(i)
+            list_id.append(i[0])
+            count += 1
         if id_user in list_id:
             print('Such a ID already exists')
         else:
             break
-    return list_id #временно
-
+    return id_user
 
 def main():
     file = open('id_file.csv', 'w')
     file.close()
 
 if __name__ == '__main__':
-    main()
     x = id_verification()
     print(x)
