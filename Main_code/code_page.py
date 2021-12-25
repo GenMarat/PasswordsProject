@@ -14,7 +14,7 @@ def menu():
             print()
     return user_choice
 
-def password_score(password: str) -> str: #Проверяет надежность пароля. Возвращает оценку от 0-5
+def score_pass(password: str) -> str: #Проверяет надежность пароля. Возвращает оценку от 0-5
     score = 0
     temp = 0
     if len(password) >= 8: #проверка длины пароля
@@ -47,7 +47,7 @@ def password_score(password: str) -> str: #Проверяет надежност
 def password():
     while True:
         password = input('Enter a password: ')
-        score = password_score(password)
+        score = score_pass(password)
         if score in [1, 2]:
             print('Too simple password')
         elif score in [3, 4]:
@@ -64,6 +64,19 @@ def password():
 
 #запрашивает ID -> открывает файл на чтение -> получает ID из базы -> ищет на вхождение ID пользователя ->
 #возвращет ID, если нет в базе данных / сообщает об задвоение и запрашивает повторно ID
+
+def id_verification():
+    file = csv.reader(open('id_file.csv', 'r'))
+    while True:
+        id_user = input('Enter ID: ')
+        for i in file:
+            if i[0] == id_user:
+                print('Such a ID already exists')
+            else:
+                return id_user
+            break
+
+
 
 
 def main():
