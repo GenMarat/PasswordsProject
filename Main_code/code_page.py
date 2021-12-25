@@ -62,28 +62,26 @@ def password():
             break
     return password
 
-#запрашивает ID -> открывает файл на чтение -> получает ID из базы -> ищет на вхождение ID пользователя ->
-#возвращет ID, если нет в базе данных / сообщает об задвоение и запрашивает повторно ID
-
 def id_verification():
     file = csv.reader(open('id_file.csv', 'r'))
     list_id = []
     while True:
         id_user = input('Enter ID: ')
-        count = 0
         for i in file:
             list_id.append(i[0])
-            count += 1
         if id_user in list_id:
             print('Such a ID already exists')
         else:
             break
     return id_user
 
-def main():
-    file = open('id_file.csv', 'w')
+def create_id_pass(id, password):
+    file = open('id_file.csv', 'a')
+    write = str(id) + ',' + str(password)
+    file.write(write + '\n')
     file.close()
 
 if __name__ == '__main__':
-    x = id_verification()
-    print(x)
+    id_user = id_verification()
+    pass_user = password()
+    create_id_pass(id_user, pass_user)
