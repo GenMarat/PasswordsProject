@@ -75,13 +75,47 @@ def id_verification():
             break
     return id_user
 
+def id_insert():
+    file = csv.reader(open('id_file.csv', 'r'))
+    list_id = []
+    while True:
+        id_user = input('Enter ID: ')
+        for i in file:
+            list_id.append(i[0])
+        if id_user in list_id:
+            break
+        else:
+            print('ID is not in the list')
+    return id_user
+
+def replace_pass(id, new_pass):
+    file = csv.reader(open('id_file.csv', 'r'))
+    list_id_pass = []
+    for i in file:
+        list_id_pass.append(i)
+    for x in list_id_pass:
+        if x[0] == str(id):
+            x[1] = new_pass
+    file = open('id_file.csv', 'w')
+    for y in list_id_pass:
+        write = str(y[0]) + ',' + str(y[1])
+        file.write(write + '\n')
+    file.close()
+
 def create_id_pass(id, password):
     file = open('id_file.csv', 'a')
     write = str(id) + ',' + str(password)
     file.write(write + '\n')
     file.close()
+    print('Your data is saved')
 
 if __name__ == '__main__':
-    id_user = id_verification()
-    pass_user = password()
-    create_id_pass(id_user, pass_user)
+    item_menu = menu()
+    if item_menu == '1':
+        id_user = id_verification()
+        pass_user = password()
+        create_id_pass(id_user, pass_user)
+    elif item_menu == '2':
+        id_user = id_insert()
+        pass_user = password()
+        replace_pass(id_user, pass_user)
