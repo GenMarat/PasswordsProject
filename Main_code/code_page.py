@@ -43,7 +43,6 @@ def score_pass(password: str) -> str: #Проверяет надежность �
     if temp > 0:
         score += 1
     return score
-
 def password():
     while True:
         password = input('Enter a password: ')
@@ -101,6 +100,7 @@ def replace_pass(id, new_pass):
         write = str(y[0]) + ',' + str(y[1])
         file.write(write + '\n')
     file.close()
+    print('Password changed')
 
 def create_id_pass(id, password):
     file = open('id_file.csv', 'a')
@@ -109,13 +109,24 @@ def create_id_pass(id, password):
     file.close()
     print('Your data is saved')
 
+def show_ids():
+    file = csv.reader(open('id_file.csv', 'r'))
+    list_id_pass = []
+    for i in file:
+        print(i[0])
+
 if __name__ == '__main__':
-    item_menu = menu()
-    if item_menu == '1':
-        id_user = id_verification()
-        pass_user = password()
-        create_id_pass(id_user, pass_user)
-    elif item_menu == '2':
-        id_user = id_insert()
-        pass_user = password()
-        replace_pass(id_user, pass_user)
+    while True:
+        item_menu = menu()
+        if item_menu == '1':
+            id_user = id_verification()
+            pass_user = password()
+            create_id_pass(id_user, pass_user)
+        elif item_menu == '2':
+            id_user = id_insert()
+            pass_user = password()
+            replace_pass(id_user, pass_user)
+        elif item_menu == '3':
+            show_ids()
+        else:
+            break
