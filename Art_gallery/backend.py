@@ -56,6 +56,21 @@ window = Tk()
 window.title('Art gallery base')
 window.geometry('720x600')
 
+name_lable = Label(text='Name')
+name_lable.place(x=20, y=20)
+
+address_lable = Label(text='Address')
+address_lable.place(x=160, y=20)
+
+town_lable = Label(text='Town')
+town_lable.place(x=300, y=20)
+
+country_lable = Label(text='Country')
+country_lable.place(x=440, y=20)
+
+postcode_lable = Label(text='Postcode')
+postcode_lable.place(x=580, y=20)
+
 name_artist = Entry(text='')
 name_artist.place(x=20, y=40, width=120)
 
