@@ -1,8 +1,8 @@
 import sqlite3
 from tkinter import *
 
-def last_id(base_data: str, sql_request: str):
-    db = sqlite3.connect(base_data)
+def last_id(base_name: str, sql_request: str):
+    db = sqlite3.connect(base_name)
     cursor = db.cursor()
     cursor.execute(sql_request)
     list_id = []
@@ -11,6 +11,17 @@ def last_id(base_data: str, sql_request: str):
     cursor.close()
     db.close()
     return max(list_id)
+
+def get_data_base(base_name: str, sql_request: str) -> list:
+    db = sqlite3.connect(base_name)
+    cursor = db.cursor()
+    cursor.execute(sql_request)
+    list_artist = []
+    for i in cursor.fetchall():
+        list_artist.append(i[0])
+    cursor.close()
+    db.close()
+    return list_artist
 
 def add_artist(base_data: str):
     db = sqlite3.connect(base_data)
@@ -33,12 +44,13 @@ def add_artist(base_data: str):
 
 ARTIST_ID = "SELECT ArtistsID FROM Artists"
 PIECE_ID = "SELECT PieceID FROM Pictures"
+ARTIST = "SELECT Name FROM Artists"
 
 window = Tk()
 window.title('Art gallery base')
 window.geometry('720x600')
 
-#Group Add Artist
+#Add Artist Group
 frame_artist = LabelFrame(text='Add artist')
 frame_artist.place(x=10, y=10, height=110, width=700)
 
@@ -75,7 +87,19 @@ postcode_artist.place(x=580, y=50, width=120)
 button_add_artist = Button(text='Add artist', command=lambda: add_artist('ArtGallery.db'))
 button_add_artist.place(x=580, y=80, width=120)
 
-#Group Add Picture
+#Add Picture Group
+frame_picture = LabelFrame(text='Add picture')
+frame_picture.place(x=10, y=130, height=110, width=700)
+
+artist_lable = Label(text='Artist')
+artist_lable.place(x=20, y=150)
+
+artists_list = get_data_base('ArtGallery.db', ARTIST)
+artists = StringVar()
+artists.set('')
+artist_listbox = OptionMenu(window, artists, *artists_list)
+artist_listbox.place(x=20, y=170, height=25, width=120)
+
 
 if __name__ == '__main__':
     window.mainloop()
