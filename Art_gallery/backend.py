@@ -98,8 +98,31 @@ artists_list = get_data_base('ArtGallery.db', ARTIST)
 artists = StringVar()
 artists.set('')
 artist_listbox = OptionMenu(window, artists, *artists_list)
-artist_listbox.place(x=20, y=170, height=25, width=120)
+artist_listbox.place(x=20, y=168, height=25, width=120)
 
+title_lable = Label(text='Title')
+title_lable.place(x=160, y=150)
+
+title = Entry(text='')
+title.place(x=160, y=170, width=260)
+
+medium_lable = Label(text='Medium')
+medium_lable.place(x=440, y=150)
+
+medium_list = ['Acrylic', 'Ink', 'Oil', 'Watercolour']
+medium = StringVar()
+medium.set('')
+medium_listbox = OptionMenu(window, artists, *medium_list)
+medium_listbox.place(x=440, y=168, height=25, width=120)
+
+price_lable = Label(text='Price')
+price_lable.place(x=580, y=150)
+
+price = Entry(text='')
+price.place(x=580, y=170, width=120)
+
+button_add_picture = Button(text='Add picture')
+button_add_picture.place(x=580, y=200, width=120)
 
 if __name__ == '__main__':
     window.mainloop()
