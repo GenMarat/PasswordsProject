@@ -42,6 +42,36 @@ def add_artist(base_data: str):
     db.commit()
     db.close()
 
+def get_artist_id(base_data: str, name: str):
+    db = sqlite3.connect(base_data)
+    cursor = db.cursor()
+    cursor.execute("SELECT ArtistsID FROM Artists WHERE Name=?", [name])
+    for i in cursor.fetchall():
+        id = int(i[0])
+    cursor.close()
+    db.close()
+    return id
+
+def add_picture(base_data: str):
+    db = sqlite3.connect(base_data)
+    cursor = db.cursor()
+
+    piece_id_get = last_id(base_data, PIECE_ID) + 1
+    artist_name_get = str(artists.get())
+    artist_id_get = get_artist_id(base_data, artist_name_get)
+    title_get = str(title.get())
+    medium_get = str(medium.get())
+    price_get = int(price.get())
+
+    cursor.execute("""INSERT INTO Pictures(PieceID, ArtistID, Title, Medium, Price)
+        VALUES(?, ?, ?, ?, ?)""", (piece_id_get, artist_id_get, title_get, medium_get, price_get))
+
+    title.delete(0, END)
+    price.delete(0, END)
+
+    db.commit()
+    db.close()
+
 ARTIST_ID = "SELECT ArtistsID FROM Artists"
 PIECE_ID = "SELECT PieceID FROM Pictures"
 ARTIST = "SELECT Name FROM Artists"
@@ -87,7 +117,7 @@ postcode_artist.place(x=580, y=50, width=120)
 button_add_artist = Button(text='Add artist', command=lambda: add_artist('ArtGallery.db'))
 button_add_artist.place(x=580, y=80, width=120)
 
-#Add Picture Group--------------------------------------------------------------
+#Add Picture Group---------------------------------------------------------
 frame_picture = LabelFrame(text='Add picture')
 frame_picture.place(x=10, y=130, height=110, width=700)
 
@@ -112,7 +142,7 @@ medium_lable.place(x=440, y=150)
 medium_list = ['Acrylic', 'Ink', 'Oil', 'Watercolour']
 medium = StringVar()
 medium.set('')
-medium_listbox = OptionMenu(window, artists, *medium_list)
+medium_listbox = OptionMenu(window, medium, *medium_list)
 medium_listbox.place(x=440, y=168, height=25, width=120)
 
 price_lable = Label(text='Price')
@@ -121,7 +151,7 @@ price_lable.place(x=580, y=150)
 price = Entry(text='')
 price.place(x=580, y=170, width=120)
 
-button_add_picture = Button(text='Add picture')
+button_add_picture = Button(text='Add picture', command=lambda: add_picture('ArtGallery.db'))
 button_add_picture.place(x=580, y=200, width=120)
 
 if __name__ == '__main__':
