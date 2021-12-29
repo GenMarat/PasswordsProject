@@ -50,7 +50,7 @@ window = Tk()
 window.title('Art gallery base')
 window.geometry('720x600')
 
-#Add Artist Group
+#Add Artist Group--------------------------------------------
 frame_artist = LabelFrame(text='Add artist')
 frame_artist.place(x=10, y=10, height=110, width=700)
 
@@ -87,7 +87,7 @@ postcode_artist.place(x=580, y=50, width=120)
 button_add_artist = Button(text='Add artist', command=lambda: add_artist('ArtGallery.db'))
 button_add_artist.place(x=580, y=80, width=120)
 
-#Add Picture Group
+#Add Picture Group--------------------------------------------------------------
 frame_picture = LabelFrame(text='Add picture')
 frame_picture.place(x=10, y=130, height=110, width=700)
 
