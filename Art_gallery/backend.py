@@ -23,6 +23,27 @@ def get_data_base(base_name: str, sql_request: str) -> list:
     db.close()
     return list_artist
 
+def get_pictures(base_name: str, sql_request: str, request: str) -> list:
+    db = sqlite3.connect(base_name)
+    cursor = db.cursor()
+    cursor.execute(sql_request, [request])
+    list_pictures = []
+    for i in cursor.fetchall():
+        list_pictures.append(i[0])
+    cursor.close()
+    db.close()
+    return list_pictures
+
+def get_artist_id(base_data: str, name: str):
+    db = sqlite3.connect(base_data)
+    cursor = db.cursor()
+    cursor.execute("SELECT ArtistsID FROM Artists WHERE Name=?", [name])
+    for i in cursor.fetchall():
+        id = int(i[0])
+    cursor.close()
+    db.close()
+    return id
+
 def add_artist(base_data: str):
     db = sqlite3.connect(base_data)
     cursor = db.cursor()
@@ -41,16 +62,6 @@ def add_artist(base_data: str):
     postcode_artist.delete(0, END)
     db.commit()
     db.close()
-
-def get_artist_id(base_data: str, name: str):
-    db = sqlite3.connect(base_data)
-    cursor = db.cursor()
-    cursor.execute("SELECT ArtistsID FROM Artists WHERE Name=?", [name])
-    for i in cursor.fetchall():
-        id = int(i[0])
-    cursor.close()
-    db.close()
-    return id
 
 def add_picture(base_data: str):
     db = sqlite3.connect(base_data)
@@ -75,12 +86,15 @@ def add_picture(base_data: str):
 ARTIST_ID = "SELECT ArtistsID FROM Artists"
 PIECE_ID = "SELECT PieceID FROM Pictures"
 ARTIST = "SELECT Name FROM Artists"
+PICTURES ="""SELECT Pictures.Title FROM Pictures, Artists
+WHERE Artists.ArtistsID = Pictures.ArtistID AND Artists.Name=?"""
 
 window = Tk()
 window.title('Art gallery base')
 window.geometry('720x600')
 
 #Add Artist Group--------------------------------------------
+
 frame_artist = LabelFrame(text='Add artist')
 frame_artist.place(x=10, y=10, height=110, width=700)
 
@@ -118,6 +132,7 @@ button_add_artist = Button(text='Add artist', command=lambda: add_artist('ArtGal
 button_add_artist.place(x=580, y=80, width=120)
 
 #Add Picture Group---------------------------------------------------------
+
 frame_picture = LabelFrame(text='Add picture')
 frame_picture.place(x=10, y=130, height=110, width=700)
 
