@@ -83,13 +83,36 @@ def add_picture(base_data: str):
     db.commit()
     db.close()
 
+def search_pictures(base_name: str):
+    db = sqlite3.connect(base_name)
+    cursor = db.cursor()
+    artists_search = artists.get()
+    medium_search = medium.get()
+    price_search = price.get()
+    list_pictures = []
+    if len(artists_search) != 0:
+        cursor.execute("""SELECT Pictures.Title FROM Pictures, Artists
+WHERE Artists.ArtistsID = Pictures.ArtistID AND Artists.Name=?""", [artists_search])
+        for i in cursor.fetchall():
+            list_pictures.append(i[0])
+    elif len(medium_search) != 0:
+        cursor.execute("SELECT Pictures.Title FROM Pictures WHERE Pictures.Medium=?", [medium_search])
+        for i in cursor.fetchall():
+            list_pictures.append(i[0])
+    elif len(price_search) != 0:
+        cursor.execute("SELECT Pictures.Title FROM Pictures WHERE Pictures.Price=?", [price_search])
+        for i in cursor.fetchall():
+            list_pictures.append(i[0])
+    price.delete(0, END)
+    artists.set('')
+    medium.set('')
+    cursor.close()
+    db.close()
+    print(list_pictures)
+
 ARTIST_ID = "SELECT ArtistsID FROM Artists"
 PIECE_ID = "SELECT PieceID FROM Pictures"
 ARTIST = "SELECT Name FROM Artists"
-PICTURES_ARTISTS ="""SELECT Pictures.Title FROM Pictures, Artists
-WHERE Artists.ArtistsID = Pictures.ArtistID AND Artists.Name=?"""
-PICTURES_MEDIUM ="""SELECT Pictures.Title FROM Pictures WHERE Pictures.Medium=?"""
-PICTURES_PRICE ="""SELECT Pictures.Title FROM Pictures WHERE Pictures.Price=?"""
 
 window = Tk()
 window.title('Art gallery base')
@@ -171,5 +194,12 @@ price.place(x=580, y=170, width=120)
 button_add_picture = Button(text='Add picture', command=lambda: add_picture('ArtGallery.db'))
 button_add_picture.place(x=580, y=200, width=120)
 
+#Search Group---------------------------------------------------------
+
+button_search = Button(text='Search', command=lambda: search_pictures('ArtGallery.db'))
+button_search.place(x=440, y=200, width=120)
+
 if __name__ == '__main__':
+    #x = search_pictures('ArtGallery.db', ARTIST)
+
     window.mainloop()
