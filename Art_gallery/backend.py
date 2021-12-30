@@ -86,8 +86,10 @@ def add_picture(base_data: str):
 ARTIST_ID = "SELECT ArtistsID FROM Artists"
 PIECE_ID = "SELECT PieceID FROM Pictures"
 ARTIST = "SELECT Name FROM Artists"
-PICTURES ="""SELECT Pictures.Title FROM Pictures, Artists
+PICTURES_ARTISTS ="""SELECT Pictures.Title FROM Pictures, Artists
 WHERE Artists.ArtistsID = Pictures.ArtistID AND Artists.Name=?"""
+PICTURES_MEDIUM ="""SELECT Pictures.Title FROM Pictures WHERE Pictures.Medium=?"""
+PICTURES_PRICE ="""SELECT Pictures.Title FROM Pictures WHERE Pictures.Price=?"""
 
 window = Tk()
 window.title('Art gallery base')
