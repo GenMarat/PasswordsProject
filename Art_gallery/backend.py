@@ -83,7 +83,7 @@ def add_picture(base_data: str):
     db.commit()
     db.close()
 
-def search_pictures(base_name: str):
+def search_pictures(base_name: str): # Запрос по имени, технике исполнения и стоимости
     db = sqlite3.connect(base_name)
     cursor = db.cursor()
     artists_search = artists.get()
@@ -103,12 +103,14 @@ WHERE Artists.ArtistsID = Pictures.ArtistID AND Artists.Name=?""", [artists_sear
         cursor.execute("SELECT Pictures.Title FROM Pictures WHERE Pictures.Price=?", [price_search])
         for i in cursor.fetchall():
             list_pictures.append(i[0])
+    search_listbox.delete(0, END)
     price.delete(0, END)
     artists.set('')
     medium.set('')
     cursor.close()
     db.close()
-    print(list_pictures)
+    for i in list_pictures:
+        search_listbox.insert(END, i)
 
 ARTIST_ID = "SELECT ArtistsID FROM Artists"
 PIECE_ID = "SELECT PieceID FROM Pictures"
@@ -158,7 +160,7 @@ button_add_artist.place(x=580, y=80, width=120)
 
 #Add Picture Group---------------------------------------------------------
 
-frame_picture = LabelFrame(text='Add picture')
+frame_picture = LabelFrame(text='Add or search picture')
 frame_picture.place(x=10, y=130, height=110, width=700)
 
 artist_lable = Label(text='Artist')
@@ -199,7 +201,11 @@ button_add_picture.place(x=580, y=200, width=120)
 button_search = Button(text='Search', command=lambda: search_pictures('ArtGallery.db'))
 button_search.place(x=440, y=200, width=120)
 
-if __name__ == '__main__':
-    #x = search_pictures('ArtGallery.db', ARTIST)
+frame_picture = LabelFrame(text='Search')
+frame_picture.place(x=10, y=250, height=195, width=700)
 
+search_listbox = Listbox()
+search_listbox.place(x=20, y=275, height=150, width=410)
+
+if __name__ == '__main__':
     window.mainloop()
