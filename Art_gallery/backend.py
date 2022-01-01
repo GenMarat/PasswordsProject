@@ -12,7 +12,7 @@ def last_id(base_name: str, sql_request: str):
     db.close()
     return max(list_id)
 
-def get_data_base(base_name: str, sql_request: str) -> list:
+def get_data_base(base_name: str, sql_request: str) -> list: #Возврат списка по sql запросу всех значений столбца BD.
     db = sqlite3.connect(base_name)
     cursor = db.cursor()
     cursor.execute(sql_request)
@@ -79,11 +79,13 @@ def add_picture(base_data: str):
 
     title.delete(0, END)
     price.delete(0, END)
-
+    artists.set('')
+    medium.set('')
     db.commit()
+    cursor.close()
     db.close()
 
-def search_pictures(base_name: str): # Запрос по имени, технике исполнения и стоимости
+def search_pic_add_listbox(base_name: str): # Запрос по имени, технике исполнения и стоимости. Список выводится в listbox
     db = sqlite3.connect(base_name)
     cursor = db.cursor()
     artists_search = artists.get()
@@ -111,6 +113,16 @@ WHERE Artists.ArtistsID = Pictures.ArtistID AND Artists.Name=?""", [artists_sear
     db.close()
     for i in list_pictures:
         search_listbox.insert(END, i)
+
+def delete_picture(base_name: str):
+    db = sqlite3.connect(base_name)
+    cursor = db.cursor()
+    pic_del = search_listbox.curselection()
+    pic_del = search_listbox.get(pic_del)
+    cursor.execute("DELETE FROM Pictures WHERE Title=?", [pic_del])
+    db.commit()
+    cursor.close()
+    db.close()
 
 ARTIST_ID = "SELECT ArtistsID FROM Artists"
 PIECE_ID = "SELECT PieceID FROM Pictures"
@@ -198,14 +210,22 @@ button_add_picture.place(x=580, y=200, width=120)
 
 #Search Group---------------------------------------------------------
 
-button_search = Button(text='Search', command=lambda: search_pictures('ArtGallery.db'))
+button_search = Button(text='Search', command=lambda: search_pic_add_listbox('ArtGallery.db'))
 button_search.place(x=440, y=200, width=120)
 
-frame_picture = LabelFrame(text='Search')
+frame_picture = LabelFrame(text='Delete')
 frame_picture.place(x=10, y=250, height=195, width=700)
 
 search_listbox = Listbox()
 search_listbox.place(x=20, y=275, height=150, width=410)
+
+#Delete Picture Group---------------------------------------------------------
+
+button_cleare = Button(text='Clear')
+button_cleare.place(x=440, y=275, width=120)
+
+button_delete = Button(text='Delete', command=lambda: delete_picture('ArtGallery.db'))
+button_delete.place(x=580, y=275, width=120)
 
 if __name__ == '__main__':
     window.mainloop()
