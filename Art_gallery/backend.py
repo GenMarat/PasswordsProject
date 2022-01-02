@@ -23,17 +23,6 @@ def get_data_base(base_name: str, sql_request: str) -> list: #Возврат с�
     db.close()
     return list_artist
 
-def get_pictures(base_name: str, sql_request: str, request: str) -> list: #?????? Нигде не используется. Нахер нужен?
-    db = sqlite3.connect(base_name)
-    cursor = db.cursor()
-    cursor.execute(sql_request, [request])
-    list_pictures = []
-    for i in cursor.fetchall():
-        list_pictures.append(i[0])
-    cursor.close()
-    db.close()
-    return list_pictures
-
 def get_artist_id(base_data: str, name: str):
     db = sqlite3.connect(base_data)
     cursor = db.cursor()
