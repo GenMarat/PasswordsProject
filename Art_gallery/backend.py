@@ -23,7 +23,7 @@ def get_data_base(base_name: str, sql_request: str) -> list: #Возврат с�
     db.close()
     return list_artist
 
-def get_pictures(base_name: str, sql_request: str, request: str) -> list:
+def get_pictures(base_name: str, sql_request: str, request: str) -> list: #?????? Нигде не используется. Нахер нужен?
     db = sqlite3.connect(base_name)
     cursor = db.cursor()
     cursor.execute(sql_request, [request])
@@ -115,14 +115,31 @@ WHERE Artists.ArtistsID = Pictures.ArtistID AND Artists.Name=?""", [artists_sear
         search_listbox.insert(END, i)
 
 def delete_picture(base_name: str):
+    file_del = open('ListDelete.txt', 'a')
     db = sqlite3.connect(base_name)
     cursor = db.cursor()
     pic_del = search_listbox.curselection()
     pic_del = search_listbox.get(pic_del)
+    list_del = []
+    cursor.execute("""SELECT ArtistID, Medium, Price FROM Pictures WHERE Title=?""", [pic_del])
+    for i in cursor.fetchall():
+        idart_medium_price = i
+    idart = str(idart_medium_price[0])
+    cursor.execute("""SELECT Artists.Name FROM Pictures, Artists
+WHERE Artists.ArtistsID = Pictures.ArtistID AND Artists.ArtistsID=?""", [idart])
+    for x in cursor.fetchall():
+        name_art = str(x[0])
+    write_arсhive = name_art + ',' + pic_del + ',' + str(idart_medium_price[1]) + ',' + str(idart_medium_price[2])
+    file_del.write(write_arсhive + '\n')
     cursor.execute("DELETE FROM Pictures WHERE Title=?", [pic_del])
+    sel_del = search_listbox.curselection()
+    search_listbox.delete(sel_del)
     db.commit()
     cursor.close()
     db.close()
+
+def clear_listbox():
+    search_listbox.delete(0, END)
 
 ARTIST_ID = "SELECT ArtistsID FROM Artists"
 PIECE_ID = "SELECT PieceID FROM Pictures"
@@ -221,7 +238,7 @@ search_listbox.place(x=20, y=275, height=150, width=410)
 
 #Delete Picture Group---------------------------------------------------------
 
-button_cleare = Button(text='Clear')
+button_cleare = Button(text='Clear', command=clear_listbox)
 button_cleare.place(x=440, y=275, width=120)
 
 button_delete = Button(text='Delete', command=lambda: delete_picture('ArtGallery.db'))
